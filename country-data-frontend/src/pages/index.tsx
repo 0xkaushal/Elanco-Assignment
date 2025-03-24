@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import CountryCard from '../components/CountryCard';
 
 export default function Home() {
 
@@ -77,6 +78,14 @@ export default function Home() {
           <p className="text-gray-500">No countries found.</p>
         )}
       </div>
+      <div className="grid grid-cols-4">
+      {filteredCountries.length > 0 ? (
+          filteredCountries.map((country) => (<div key={country.name}><CountryCard countryName={country.name} countryUrl={country.flag} region={country.region}/></div>))): (
+            <p className="text-gray-500">No countries found.</p>
+          )}
+      
+      </div>
+      
     </div>
   );
 };
