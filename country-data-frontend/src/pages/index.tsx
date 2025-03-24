@@ -2,7 +2,14 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function Home() {
-  const [countries, setCountries] = useState([]);
+
+  interface Country {
+    name: string;
+    flag: string;
+    region: string;
+  }
+
+  const [countries, setCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,7 +20,7 @@ export default function Home() {
         const response = await axios.get('http://localhost:3001/countries');
         setCountries(response.data);
         setLoading(false);
-      } catch (err) {
+      } catch {
         setError('Failed to load countries');
         setLoading(false);
       }
@@ -24,7 +31,7 @@ export default function Home() {
   if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
   if (error) return <p className="text-red-500">{error}</p>;
 
-  const filteredCountries = countries.filter((country: any) =>
+  const filteredCountries = countries.filter((country: Country) =>
     country.name.includes(searchTerm)
   );
 
