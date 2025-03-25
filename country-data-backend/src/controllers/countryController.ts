@@ -5,6 +5,7 @@ const REST_COUNTRIES_API = 'https://restcountries.com/v3.1/all';
 
 // Get all countries
 export const getCountries = async (req: Request, res: Response) => {
+  try{
     const response = await axios.get(REST_COUNTRIES_API);
     const countries = response.data.map((country: any) => ({
       name: country.name.common,
@@ -13,6 +14,10 @@ export const getCountries = async (req: Request, res: Response) => {
       code: country.cca2
     }));
     res.json(countries);
+  }
+  catch(e){
+    res.status(500).send({'msg':'request failed with status 500'})
+  }
 };
 
 // Get country by code
@@ -31,13 +36,15 @@ export const getCountryByCode = async (req: Request, res: Response) => {
     });
   }
   catch(e){
+    res.status(500).send({'msg':'request failed with status 500'})
   }
 
 };
 
 // Filter countries by region
 export const filterCountriesByRegion = async (req: Request, res: Response) => {
-  const { region } = req.params;
+  try{
+    const { region } = req.params;
     const response = await axios.get(REST_COUNTRIES_API);
     const countries = response.data.filter((country: any) => country.region === region);
     const filteredcountries = countries.map((country: any) => ({
@@ -47,6 +54,11 @@ export const filterCountriesByRegion = async (req: Request, res: Response) => {
       code: country.cca2
     }));
     res.json(filteredcountries);
+  }
+
+    catch(e){
+      res.status(500).send({'msg':'request failed with status 500'})
+    }
 };
 
 // Search countries
@@ -80,7 +92,7 @@ export const searchCountries = async (req: Request, res: Response) => {
     res.json(filteredcountries);
   }
   catch(e){
-console.log(e)
+    res.status(500).send({'msg':'request failed with status 500'})
   }
 
 

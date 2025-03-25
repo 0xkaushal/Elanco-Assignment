@@ -48,9 +48,13 @@ export default function CountryPage() {
     if (code) {
       const fetchCountriesbyCode = async (code: string) => {
         try {
-          const response = await axios.get(`http://localhost:3001/countries/code/${code}`);
-          setCountries(response.data);
-          setLoading(false);
+        await axios.get(`http://localhost:3001/countries/code/${code}`).then((response)=>{
+            setCountries(response.data);
+            setLoading(false);
+          }).catch((error)=>{
+            console.log(`Error Occurred with ${error}`)
+          });
+
         } catch (error) {
           setError('Failed to load countries' + error);
           setLoading(false);

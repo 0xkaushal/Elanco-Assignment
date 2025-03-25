@@ -26,9 +26,13 @@ export default function Home() {
     const fetchCountries = async () => {
       try {
         const options =buildOptions(filterType,searchTerm)
-        const response = await axios(options); 
-        setCountries(response.data);
-        setLoading(false);
+        await axios(options).then((response)=>{
+          setCountries(response.data);
+          setLoading(false);
+        }).catch((error)=>{
+          console.log(`Error Occurred with ${error}`)
+        }); 
+
       } catch {
         setError('Failed to load countries');
         setLoading(false);

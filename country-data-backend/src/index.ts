@@ -12,6 +12,19 @@ app.use(express.json());
 app.use('/countries', countryRoutes);
 
 // Start server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+const gracefulShutdown = () => {
+  server.close(() => {
+    console.log('Server Stopped..');
+    process.exit(0);
+  });
+};
+process.on('SIGINT', gracefulShutdown);  
+process.on('SIGTERM', gracefulShutdown);
+
+process.on('exit', () => {
+  console.log('Process is exiting..');
 });

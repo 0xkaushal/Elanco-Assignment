@@ -31,9 +31,13 @@ export default function Region() {
     if (region) {
       const fetchCountriesbyRegion = async (region: string) => {
         try {
-          const response = await axios.get(`http://localhost:3001/countries/region/${region}`);
-          setCountries(response.data); 
-          setLoading(false); 
+        await axios.get(`http://localhost:3001/countries/region/${region}`).then((response)=>{
+            setCountries(response.data); 
+            setLoading(false); 
+          }).catch((error)=>{
+            console.log(`Error Occurred with ${error}`)
+          });
+
         } catch (error) {
           setError('Failed to load countries: ' + error);
           setLoading(false); 
