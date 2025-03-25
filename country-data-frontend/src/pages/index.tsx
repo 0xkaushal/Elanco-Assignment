@@ -25,7 +25,6 @@ export default function Home() {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        console.log(filterType,"****",searchTerm)
         const options =buildOptions(filterType,searchTerm)
         const response = await axios(options); 
         setCountries(response.data);
@@ -40,29 +39,23 @@ export default function Home() {
 
   const buildOptions = (filterType: string, searchString: string) => {
     const queryParams = buildQuery(filterType, searchString);
-    console.log(queryParams)
-    console.log(searchString !== '',searchTerm)
   
-    // Base URL assignment depending on whether a search string is provided
     const baseUrl = searchString == '' ? 'http://localhost:3001/countries' : 'http://localhost:3001/countries/search/';
   
-    // Options for Axios
     const options = {
       method: "GET",
       url: baseUrl,
-      params: queryParams,  // Query parameters are passed here
+      params: queryParams,
       headers: {
         "Content-Type": "application/json",
       },
     };
-    console.log(options)
   
     return options;
   };
 
   const buildQuery = (filterType: string, searchString: string) => {
     const queryParams: { [key: string]: string } = {};
-    console.log(filterType)
   
     if (filterType === "Capital") {
       queryParams.capital = searchString;
@@ -83,27 +76,9 @@ export default function Home() {
   if (loading) return <div className="flex justify-center items-center h-screen"><Loader/></div>;
   if (error) return <p className="text-red-500">{error}</p>;
 
-  // const filteredCountries = countries.filter((country: Country) =>
-  //   country.name.includes(searchTerm)
-  // );
 
   return (
     <div >
-      {/* Search Input */}
-      {/* <div className="mb-4">
-        <label className="block text-gray-700">
-          Search for a Country
-        </label>
-        <input
-          id="search"
-          type="text"
-          placeholder="Enter country name"
-          className="border border-gray-300"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div> */}
-
       <Header/>
       <Wall filter={filterType} setFilterType={setFilterType} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">

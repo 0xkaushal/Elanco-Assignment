@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Loader from '@/src/components/Loader';  // Assuming you have a loader component
+import Loader from '@/src/components/Loader';
 import CountryCard from '@/src/components/CountryCard';
 import Header from '@/src/components/Header';
 
@@ -26,24 +26,23 @@ export default function Region() {
 
   useEffect(() => {
     setLoading(true)
-    const { region } = router.query as CountryRegion;  // Destructure region from router.query
+    const { region } = router.query as CountryRegion; 
 
     if (region) {
       const fetchCountriesbyRegion = async (region: string) => {
         try {
-          console.log(`Fetching countries for region: ${region}`);
           const response = await axios.get(`http://localhost:3001/countries/region/${region}`);
-          setCountries(response.data);  // Set countries in state
-          setLoading(false);  // Mark loading as false once the data is fetched
+          setCountries(response.data); 
+          setLoading(false); 
         } catch (error) {
           setError('Failed to load countries: ' + error);
-          setLoading(false);  // Handle errors and mark loading as false
+          setLoading(false); 
         }
       };
 
       fetchCountriesbyRegion(region);
     }
-  }, [router.query]);  // Re-run the effect when `router.query` changes (region)
+  }, [router.query]);
 
 
   // Handle error state
