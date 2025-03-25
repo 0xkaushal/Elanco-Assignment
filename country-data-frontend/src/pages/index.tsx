@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import CountryCard from '../components/CountryCard';
+import Header from '../components/Header';
+import Wall from '../components/wall';
+import Loader from '../components/Loader';
+
+
 
 export default function Home() {
 
@@ -8,6 +13,7 @@ export default function Home() {
     name: string;
     flag: string;
     region: string;
+    code: string;
   }
 
   const [countries, setCountries] = useState<Country[]>([]);
@@ -29,7 +35,7 @@ export default function Home() {
     fetchCountries();
   }, []);
 
-  if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  if (loading) return <div className="flex justify-center items-center h-screen"><Loader/></div>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   const filteredCountries = countries.filter((country: Country) =>
@@ -53,34 +59,11 @@ export default function Home() {
         />
       </div>
 
-      {/* Display filtered countries */}
-      <div className="grid grid-cols-4">
-        {filteredCountries.length > 0 ? (
-          filteredCountries.map((country) => (
-            <div key={country.name} className="bg-white rounded-lg shadow-md p-4">
-              {/* Accessing the flag from the 'flag' property */}
-              {country.flag ? (
-                <img
-                  className="w-10 h-10 object-cover"
-                  src={country.flag}
-                  alt={`Flag of ${country.name}`}
-                />
-              ) : (
-                <p className="text-center">No Flag Available</p>
-              )}
-              <div className="mt-2 text-center">
-                <h2>{country.name}</h2>
-                <p>{country.region}</p>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500">No countries found.</p>
-        )}
-      </div>
+      <Header/>
+      <Wall/>
       <div className="grid grid-cols-4">
       {filteredCountries.length > 0 ? (
-          filteredCountries.map((country) => (<div key={country.name}><CountryCard countryName={country.name} countryUrl={country.flag} region={country.region}/></div>))): (
+          filteredCountries.map((country) => (<div key={country.name}><CountryCard countryName={country.name} countryUrl={country.flag} region={country.region} code={country.code}/></div>))): (
             <p className="text-gray-500">No countries found.</p>
           )}
       

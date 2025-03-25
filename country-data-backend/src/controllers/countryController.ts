@@ -10,6 +10,7 @@ export const getCountries = async (req: Request, res: Response) => {
       name: country.name.common,
       flag: country.flags.svg,
       region: country.region,
+      code: country.cca2
     }));
     res.json(countries);
 };
@@ -34,7 +35,13 @@ export const filterCountriesByRegion = async (req: Request, res: Response) => {
   const { region } = req.params;
     const response = await axios.get(REST_COUNTRIES_API);
     const countries = response.data.filter((country: any) => country.region === region);
-    res.json(countries);
+    const filteredcountries = countries.map((country: any) => ({
+      name: country.name.common,
+      flag: country.flags.svg,
+      region: country.region,
+      code: country.cca2
+    }));
+    res.json(filteredcountries);
 };
 
 // Search countries

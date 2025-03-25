@@ -1,8 +1,7 @@
-const sample = () => {
-    return ( 
-    <>
-    <h1>Hello</h1>
-    </>)
-}
+import React from 'react'
 
-export default sample;
+export default function SearchBar() {
+  return (
+    <div>SearchBar</div>
+  )
+}
