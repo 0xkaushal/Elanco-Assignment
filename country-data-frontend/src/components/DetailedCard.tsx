@@ -6,7 +6,7 @@ interface Currency {
   }
   
   interface Languages {
-    [key: string]: string;  // This allows any language code as a key, with a string value representing the language name
+    [key: string]: string;  
   }
   
   interface PropType {
@@ -16,7 +16,7 @@ interface Currency {
     languages: Languages;
     region: string;
     currency: {
-      [key: string]: Currency;  // The currency code (e.g., "EUR") as a key, and the currency details as an object
+      [key: string]: Currency; 
     };
   }
 

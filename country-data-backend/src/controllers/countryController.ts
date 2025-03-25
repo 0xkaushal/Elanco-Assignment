@@ -18,7 +18,6 @@ export const getCountries = async (req: Request, res: Response) => {
 // Get country by code
 export const getCountryByCode = async (req: Request, res: Response) => {
   try{
-    console.log("^^^^^^^^^",req.params)
     const { code } = req.params;
     const response = await axios.get(`https://restcountries.com/v3.1/alpha/${code}`);
     const country = response.data[0];
@@ -32,7 +31,6 @@ export const getCountryByCode = async (req: Request, res: Response) => {
     });
   }
   catch(e){
-    console.log(e,"111111111")
   }
 
 };
@@ -55,11 +53,8 @@ export const filterCountriesByRegion = async (req: Request, res: Response) => {
 export const searchCountries = async (req: Request, res: Response) => {
   try{
     const { country, capital, region, timezone } = req.query;
-    console.log(req.query,"******")
     const response = await axios.get(REST_COUNTRIES_API);
     let countries = response.data;
-    console.log(countries.length)
-    console.log(countries[0])
     if (country) {
       countries = countries.filter((item: any) =>
         item.name.common.toLowerCase().includes((country as string).toLowerCase())

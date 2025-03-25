@@ -8,7 +8,6 @@ export default function Header() {
 
   return (
     <div className="relative flex flex-wrap items-center justify-between w-full bg-white py-7 shrink-0">
-      {/* Logo */}
       <div>
         <Link href={`/`}>
           <img
@@ -19,7 +18,6 @@ export default function Header() {
         </Link>
       </div>
 
-      {/* Navbar Links (Hidden on Mobile, Visible on Medium screens and up) */}
       <div className="hidden md:flex items-center justify-between gap-12 text-black">
         <Link className="text-lg font-normal text-dark-grey-700 hover:text-dark-grey-900" href='/countries/region/Asia'>Asia</Link>
         <Link className="text-lg font-normal text-dark-grey-700 hover:text-dark-grey-900" href='/countries/region/Americas'>Americas</Link>
@@ -27,7 +25,6 @@ export default function Header() {
         <Link className="text-lg font-normal text-dark-grey-700 hover:text-dark-grey-900" href='/countries/region/Oceania'>Oceania</Link>
       </div>
 
-      {/* Hamburger Icon for Mobile View */}
       <button
         className="md:hidden flex items-center p-2 text-black"
         onClick={toggleMenu}
@@ -49,7 +46,6 @@ export default function Header() {
         </svg>
       </button>
 
-      {/* Mobile Menu (Shows when isOpen is true) */}
       <div
         className={`md:hidden ${isOpen ? 'block' : 'hidden'} absolute top-full left-0 w-full bg-white py-4`}
       >

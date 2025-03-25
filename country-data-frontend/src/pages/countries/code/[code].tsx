@@ -12,7 +12,7 @@ export default function CountryPage() {
   }
   
   interface Languages {
-    [key: string]: string;  // This allows any language code as a key, with a string value representing the language name
+    [key: string]: string;  
   }
   
   interface Country {
@@ -22,7 +22,7 @@ export default function CountryPage() {
     languages: Languages;
     region: string;
     currency: {
-      [key: string]: Currency;  // The currency code (e.g., "EUR") as a key, and the currency details as an object
+      [key: string]: Currency; 
     };
   }
   interface CountryCode {
@@ -45,11 +45,9 @@ export default function CountryPage() {
   useEffect(() => {
     const { code } = router.query as CountryCode;
 
-    // Check if `code` is available before fetching
     if (code) {
       const fetchCountriesbyCode = async (code: string) => {
         try {
-          console.log(`Fetching countries for code: ${code}`);
           const response = await axios.get(`http://localhost:3001/countries/code/${code}`);
           setCountries(response.data);
           setLoading(false);
@@ -61,7 +59,7 @@ export default function CountryPage() {
 
       fetchCountriesbyCode(code);
     }
-  }, [router.query]); // Dependency on router.query ensures re-fetching when query changes
+  }, [router.query]);
 
   if (loading) return <div className="flex justify-center items-center h-screen"><Loader/></div>;
 
