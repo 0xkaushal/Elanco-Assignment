@@ -61,7 +61,7 @@ export default function Home() {
 
       <Header/>
       <Wall/>
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
       {filteredCountries.length > 0 ? (
           filteredCountries.map((country) => (<div key={country.name}><CountryCard countryName={country.name} countryUrl={country.flag} region={country.region} code={country.code}/></div>))): (
             <p className="text-gray-500">No countries found.</p>
