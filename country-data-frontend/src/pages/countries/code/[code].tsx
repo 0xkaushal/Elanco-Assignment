@@ -2,12 +2,29 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Loader from '../../../components/Loader';
+import DetailedCard from '@/src/components/DetailedCard';
+import Header from '@/src/components/Header';
 
 export default function CountryPage() {
+  interface Currency {
+    name: string;
+    symbol: string;
+  }
+  
+  interface Languages {
+    [key: string]: string;  // This allows any language code as a key, with a string value representing the language name
+  }
+  
   interface Country {
     name: string;
-    population : string;
-  } 
+    flag: string;
+    population: number;
+    languages: Languages;
+    region: string;
+    currency: {
+      [key: string]: Currency;  // The currency code (e.g., "EUR") as a key, and the currency details as an object
+    };
+  }
   interface CountryCode {
     code?: string;
   }
@@ -15,8 +32,12 @@ export default function CountryPage() {
   const router = useRouter();
   
   const [countries, setCountries] = useState<Country>({
-      name: '',
-      population:''
+    flag: '',
+    name: '',
+    population:0,
+    languages:{'':''},
+    region: '',
+    currency:{'':{name:'',symbol:''}},
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -29,7 +50,7 @@ export default function CountryPage() {
       const fetchCountriesbyCode = async (code: string) => {
         try {
           console.log(`Fetching countries for code: ${code}`);
-          const response = await axios.get(`http://localhost:3001/countries/${code}`);
+          const response = await axios.get(`http://localhost:3001/countries/code/${code}`);
           setCountries(response.data);
           setLoading(false);
         } catch (error) {
@@ -48,9 +69,10 @@ export default function CountryPage() {
 
   return (
     <div>
-      <h1>Country Data</h1>
-{countries.name}
-{countries.population}
+    <Header/>
+    <div className='flex m-5 items-center justify-center'>
+      <DetailedCard flag={countries.flag} name={countries.name} population={countries.population} languages={countries.languages} region={countries.region} currency={countries.currency} />
+    </div>
     </div>
   );
 }

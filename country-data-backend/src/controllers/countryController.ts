@@ -17,7 +17,9 @@ export const getCountries = async (req: Request, res: Response) => {
 
 // Get country by code
 export const getCountryByCode = async (req: Request, res: Response) => {
-  const { code } = req.params;
+  try{
+    console.log("^^^^^^^^^",req.params)
+    const { code } = req.params;
     const response = await axios.get(`https://restcountries.com/v3.1/alpha/${code}`);
     const country = response.data[0];
     res.json({
@@ -28,6 +30,11 @@ export const getCountryByCode = async (req: Request, res: Response) => {
       region: country.region,
       currency: country.currencies,
     });
+  }
+  catch(e){
+    console.log(e,"111111111")
+  }
+
 };
 
 // Filter countries by region
@@ -46,12 +53,16 @@ export const filterCountriesByRegion = async (req: Request, res: Response) => {
 
 // Search countries
 export const searchCountries = async (req: Request, res: Response) => {
-  const { name, capital, region, timezone } = req.query;
+  try{
+    const { country, capital, region, timezone } = req.query;
+    console.log(req.query,"******")
     const response = await axios.get(REST_COUNTRIES_API);
     let countries = response.data;
-    if (name) {
-      countries = countries.filter((country: any) =>
-        country.name.common.toLowerCase().includes((name as string).toLowerCase())
+    console.log(countries.length)
+    console.log(countries[0])
+    if (country) {
+      countries = countries.filter((item: any) =>
+        item.name.common.toLowerCase().includes((country as string).toLowerCase())
       );
     }
     if (capital) {
@@ -60,10 +71,22 @@ export const searchCountries = async (req: Request, res: Response) => {
       );
     }
     if (region) {
-      countries = countries.filter((country: any) => country.region === region);
+      countries = countries.filter((country: any) => country.region.toLowerCase().includes((region as string).toLowerCase()));
     }
     if (timezone) {
       countries = countries.filter((country: any) => country.timezones.includes(timezone as string));
     }
-    res.json(countries);
+    const filteredcountries = countries.map((country: any) => ({
+      name: country.name.common,
+      flag: country.flags.svg,
+      region: country.region,
+      code: country.cca2
+    }));
+    res.json(filteredcountries);
+  }
+  catch(e){
+console.log(e)
+  }
+
+
   }

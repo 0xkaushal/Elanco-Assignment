@@ -20,11 +20,14 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState('');
 
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/countries');
+        console.log(filterType,"****",searchTerm)
+        const options =buildOptions(filterType,searchTerm)
+        const response = await axios(options); 
         setCountries(response.data);
         setLoading(false);
       } catch {
@@ -33,19 +36,61 @@ export default function Home() {
       }
     };
     fetchCountries();
-  }, []);
+  }, [filterType,searchTerm]);
+
+  const buildOptions = (filterType: string, searchString: string) => {
+    const queryParams = buildQuery(filterType, searchString);
+    console.log(queryParams)
+    console.log(searchString !== '',searchTerm)
+  
+    // Base URL assignment depending on whether a search string is provided
+    const baseUrl = searchString == '' ? 'http://localhost:3001/countries' : 'http://localhost:3001/countries/search/';
+  
+    // Options for Axios
+    const options = {
+      method: "GET",
+      url: baseUrl,
+      params: queryParams,  // Query parameters are passed here
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    console.log(options)
+  
+    return options;
+  };
+
+  const buildQuery = (filterType: string, searchString: string) => {
+    const queryParams: { [key: string]: string } = {};
+    console.log(filterType)
+  
+    if (filterType === "Capital") {
+      queryParams.capital = searchString;
+    }
+  
+    if (filterType === "Region") {
+      queryParams.region = searchString;
+    }
+  
+    if (filterType === "Country") {
+      queryParams.country = searchString;
+    }
+  
+    return queryParams;
+  };
+  
 
   if (loading) return <div className="flex justify-center items-center h-screen"><Loader/></div>;
   if (error) return <p className="text-red-500">{error}</p>;
 
-  const filteredCountries = countries.filter((country: Country) =>
-    country.name.includes(searchTerm)
-  );
+  // const filteredCountries = countries.filter((country: Country) =>
+  //   country.name.includes(searchTerm)
+  // );
 
   return (
-    <div className="p-6">
+    <div >
       {/* Search Input */}
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <label className="block text-gray-700">
           Search for a Country
         </label>
@@ -57,13 +102,13 @@ export default function Home() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </div>
+      </div> */}
 
       <Header/>
-      <Wall/>
+      <Wall filter={filterType} setFilterType={setFilterType} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-      {filteredCountries.length > 0 ? (
-          filteredCountries.map((country) => (<div key={country.name}><CountryCard countryName={country.name} countryUrl={country.flag} region={country.region} code={country.code}/></div>))): (
+      {countries.length > 0 ? (
+          countries.map((country) => (<div key={country.name}><CountryCard countryName={country.name} countryUrl={country.flag} region={country.region} code={country.code}/></div>))): (
             <p className="text-gray-500">No countries found.</p>
           )}
       
